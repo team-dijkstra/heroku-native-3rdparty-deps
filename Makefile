@@ -2,30 +2,27 @@
 LIBS := $(basename $(filter-out depend.mk heroku.mk,$(wildcard *.mk)))
 LOGDIR := /tmp/log
 
-# why does this have to be tabbed? is there no other way?
-#
-define vulcan_build 
-	vulcan build -s $(1).upload.tgz -p $(LOGDIR) -c "make -f $(1).mk LOGDIR=$(LOGDIR)" -v -o $(1).log.tgz
-	@echo Build Results
-	@gunzip -c $(1).log.tgz
-endef
-
-define vulcan_template
-$(1): $(1).upload.tgz
-$(call vulcan_build,$(1))
-endef	
-
-.PHONY: all clean depend
+.PHONY: all clean depend $(LIBS)
 .DEFAULT_GOAL = all
 
 all: $(LIBS) ;
 
-#depend: $(addsuffix .d,$(LIBS))
+depend: $(addsuffix .d,$(LIBS))
 
 %.upload.tgz: %.mk
 	tar -czf $@ $<
 
-$(foreach lib,$(LIBS),$(eval $(call vulcan_template,$(lib))))
+%.log.tgz: %.upload.tgz
+	vulcan build -s $< -p $(LOGDIR) -c "make -f $(@:.log.tgz=).mk LOGDIR=$(LOGDIR)" -v -o $@
+
+# generate targets for dependency checking. Only works locally.
+# if a logfile set for a library has already been generated, presumably
+# the corresponding library has already been built.
+#
+# NB: this does not work if there were build errors...
+#
+$(foreach lib,$(LIBS),$(eval $(lib): $(lib).log.tgz))
+$(foreach lib,$(LIBS),$(eval $(lib).log.tgz: $(lib).upload.tgz))
 
 # requires a separate make invocation since each library makefile needs to be
 # read for its dependencies, and all use the same variable names
@@ -35,7 +32,7 @@ $(foreach lib,$(LIBS),$(eval $(call vulcan_template,$(lib))))
 	$(MAKE) -f depend.mk $(<:.mk=)
 
 clean:
-	-rm -f *.d *.upload.tgz
+	-rm -f *.d *.upload.tgz *.log.tgz
 
 ifneq ($(MAKECMDGOALS),clean)
 -include $(addsuffix .d,$(LIBS))
