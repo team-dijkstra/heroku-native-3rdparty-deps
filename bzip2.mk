@@ -9,4 +9,10 @@ INSTALL = $(MAKE) install PREFIX=$(INSTALLDIR)
 
 DEPENDENCIES :=
 
+# attempt to patch the makefile to build platform independent code
+patch-makefile: Makefile | config
+	sed -i 's/^CFLAGS.*$$/& -fPIC/' $<
+build: patch-makefile
+
 -include $(HOME)/build/heroku.mk
+
