@@ -22,5 +22,3 @@ CONFIGURE = ./source/runConfigureICU Linux --disable-renaming --with-data-packag
 
 DEPENDENCIES :=
 
--include $(HOME)/build/heroku.mk
-

@@ -7,5 +7,3 @@ CONFIGURE = ./configure --prefix=$(INSTALLDIR) --enable-cxx
 
 DEPENDENCIES :=
 
--include $(HOME)/build/heroku.mk
-

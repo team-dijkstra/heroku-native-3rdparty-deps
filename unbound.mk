@@ -19,5 +19,3 @@ CONFIGURE = ./configure --prefix=$(INSTALLDIR) --with-pthreads $(patsubst %,--%d
 # (circular dependency)
 DEPENDENCIES := openssl ldns
 
--include $(HOME)/build/heroku.mk
-

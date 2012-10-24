@@ -5,5 +5,3 @@ LIB_VERSION := 1.6.13
 
 DEPENDENCIES := openssl
 
--include $(HOME)/build/heroku.mk
-

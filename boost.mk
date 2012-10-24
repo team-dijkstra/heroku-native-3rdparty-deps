@@ -14,4 +14,3 @@ config-extra: config
 	echo 'using mpi ;' >> user-config.jam
 build: config-extra
 
--include $(HOME)/build/heroku.mk

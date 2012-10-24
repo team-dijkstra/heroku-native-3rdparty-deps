@@ -5,4 +5,3 @@ LIB_VERSION := 1.9.0
 
 DEPENDENCIES := bzip2
 
--include $(HOME)/build/heroku.mk

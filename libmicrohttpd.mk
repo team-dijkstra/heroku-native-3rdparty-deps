@@ -12,5 +12,3 @@ CONFIGURE = ./configure --prefix=$(INSTALLDIR) --disable-curl --with-gnutls --en
 # something missing from gnutls?
 DEPENDENCIES := libgcrypt gnutls
 
--include $(HOME)/build/heroku.mk
-

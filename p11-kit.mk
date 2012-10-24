@@ -5,5 +5,3 @@ LIB_VERSION := 0.14.0
 
 DEPENDENCIES :=
 
--include $(HOME)/build/heroku.mk
-

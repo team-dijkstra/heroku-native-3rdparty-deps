@@ -7,5 +7,3 @@ CONFIGURE = ./configure --prefix=$(INSTALLDIR) --disable-dependency-tracking
 
 DEPENDENCIES := gmp
 
--include $(HOME)/build/heroku.mk
-

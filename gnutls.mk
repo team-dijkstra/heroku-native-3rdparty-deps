@@ -17,4 +17,3 @@ CONFIGURE = ./configure --prefix=$(INSTALLDIR) --enable-threads=posix --with-lib
 
 DEPENDENCIES := gmp nettle libtasn1 p11-kit unbound ldns
 
--include $(HOME)/build/heroku.mk

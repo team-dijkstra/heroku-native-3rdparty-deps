@@ -14,5 +14,3 @@ patch-makefile: Makefile | config
 	sed -i 's/^CFLAGS.*$$/& -fPIC/' $<
 build: patch-makefile
 
--include $(HOME)/build/heroku.mk
-

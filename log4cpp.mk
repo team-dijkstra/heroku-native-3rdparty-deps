@@ -10,4 +10,3 @@ CONFIGURE = ./log4cpp/configure --prefix=$(INSTALLDIR) --disable-doxygen --with-
 
 DEPENDENCIES :=
 
--include $(HOME)/build/heroku.mk

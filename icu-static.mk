@@ -23,5 +23,3 @@ CONFIGURE = ./icu/source/runConfigureICU Linux --disable-renaming --enable-stati
 
 DEPENDENCIES :=
 
--include $(HOME)/build/heroku.mk
-

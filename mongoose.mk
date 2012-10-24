@@ -13,4 +13,3 @@ endef
 
 DEPENDENCIES :=
 
--include $(HOME)/build/heroku.mk

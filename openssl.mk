@@ -7,5 +7,3 @@ CONFIGURE = ./config --prefix=$(INSTALLDIR) --openssldir=$(INSTALLDIR)/openssl t
 
 DEPENDENCIES :=
 
--include $(HOME)/build/heroku.mk
-
