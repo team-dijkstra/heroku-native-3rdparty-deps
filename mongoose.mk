@@ -3,7 +3,7 @@ LIBNAME := mongoose
 LIB_URL := https://github.com/downloads/valenok/mongoose/mongoose-3.3.tgz
 LIB_VERSION := 3.3.0
 
-CONFIGURE = @echo nothing to configure
+CONFIGURE = echo nothing to configure
 BUILD = $(MAKE) linux
 define INSTALL
 	-mkdir -p $(INSTALLDIR)/include

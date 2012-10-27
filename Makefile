@@ -4,11 +4,15 @@ LOGDIR := /tmp/log
 
 ifdef LOCALBUILD
 
-MAKEFILES = "$(abspath $(@:.log.tgz=).mk)"
+ifeq ($(BUILDENV),)
+$(error BUILDENV not defined. Must be set to the location of a makefile specifying S3 keys and any other required settings)
+endif
+
+MAKEFILES = "$(BUILDENV) $(abspath $(@:.log.tgz=).mk)"
 MAIN := build/heroku.mk
 
 define build
-	MAKEFILES=$(MAKEFILES) $(MAKE) -f ../$(MAIN) -C $(@:.log.tgz=)-src LOGDIR=$(LOGDIR)
+	MAKEFILES=$(MAKEFILES) $(MAKE) -f $(MAIN) LOGDIR=$(LOGDIR)
     tar -czf $@ $(LOGDIR)
 endef
 
@@ -33,9 +37,6 @@ depend: $(addsuffix .d,$(LIBS))
 %.upload.tgz: %.mk
 	tar -czf $@ $<
 
-%-build.tgz: %.log.tgz
-	mv $(<:.log.tgz=)-src/$@ .
-
 %.log.tgz: %.upload.tgz
 	$(build)
 	
@@ -47,19 +48,6 @@ depend: $(addsuffix .d,$(LIBS))
 #
 $(foreach lib,$(LIBS),$(eval $(lib): $(lib).log.tgz))
 $(foreach lib,$(LIBS),$(eval $(lib).log.tgz: $(lib).upload.tgz))
-
-ifdef LOCALBUILD
-
-define dir_templ
-$(1):
-	mkdir $(1)
-endef
-
-$(foreach lib,$(LIBS),$(eval $(lib).log.tgz: $(lib)-src))
-$(foreach lib,$(LIBS),$(eval $(call dir_templ,$(lib)-src)))
-$(foreach lib,$(LIBS),$(eval $(lib)-build.tgz: $(lib).log.tgz))
-
-endif
 
 # requires a separate make invocation since each library makefile needs to be
 # read for its dependencies, and all use the same variable names
