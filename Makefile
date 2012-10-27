@@ -1,6 +1,7 @@
 
 LIBS := $(basename $(filter-out depend.mk heroku.mk,$(wildcard *.mk)))
 LOGDIR := /tmp/log
+make_cmd = MAKEFILES=$(MAKEFILES) $(MAKE) -f $(main) LOGDIR=$(LOGDIR)
 
 ifdef LOCALBUILD
 
@@ -9,20 +10,20 @@ $(error BUILDENV not defined. Must be set to the location of a makefile specifyi
 endif
 
 MAKEFILES = "$(BUILDENV) $(abspath $(@:.log.tgz=).mk)"
-MAIN := build/heroku.mk
+main := build/heroku.mk
 
 define build
-	MAKEFILES=$(MAKEFILES) $(MAKE) -f $(MAIN) LOGDIR=$(LOGDIR)
+	$(make_cmd)
     tar -czf $@ $(LOGDIR)
 endef
 
 else
 
 MAKEFILES = "$$HOME/.build-env $(@:.log.tgz=).mk"
-MAIN := $$HOME/build/heroku.mk
+main := $$HOME/build/heroku.mk
 
 define build
-	vulcan build -s $< -p $(LOGDIR) -c 'MAKEFILES=$(MAKEFILES) make -f $(MAIN) LOGDIR=$(LOGDIR)' -v -o $@
+	vulcan build -s $< -p $(LOGDIR) -c '$(make_cmd)' -v -o $@
 endef
 
 endif

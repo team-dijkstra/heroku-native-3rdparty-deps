@@ -10,7 +10,7 @@ INSTALL = $(MAKE) install PREFIX=$(INSTALLDIR)
 DEPENDENCIES :=
 
 # attempt to patch the makefile to build platform independent code
-patch-makefile: Makefile | config
+patch-makefile: $(BUILDDIR)/Makefile | $(LIBNAME).config
 	sed -i 's/^CFLAGS.*$$/& -fPIC/' $<
 build: patch-makefile
 
