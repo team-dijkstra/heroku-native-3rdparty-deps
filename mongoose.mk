@@ -6,10 +6,15 @@ LIB_VERSION := 3.3.0
 CONFIGURE = echo nothing to configure
 BUILD = $(MAKE) linux
 define INSTALL
-	-mkdir -p $(INSTALLDIR)/include
-	cp $(LIBNAME).h $(INSTALLDIR)/include
-	cp $(LIBNAME) lib$(LIBNAME).so $(INSTALLDIR)
+cp $(LIBNAME).h $(INSTALLDIR)/include
+cp lib$(LIBNAME).so $(INSTALLDIR)/lib
+cp $(LIBNAME) $(INSTALLDIR)/bin
 endef
+
+DIRECTORIES = $(INSTALLDIR)/include
+
+.SECONDEXPANSION:
+install: $$(INSTALLDIR)/include
 
 DEPENDENCIES :=
 

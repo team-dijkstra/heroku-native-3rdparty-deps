@@ -11,6 +11,6 @@ DEPENDENCIES := bzip2
 
 # add mpi support to the build
 config-extra: config
-	echo 'using mpi ;' >> user-config.jam
+	echo 'using mpi ;' >> $(BUILDDIR)/user-config.jam
 build: config-extra
 

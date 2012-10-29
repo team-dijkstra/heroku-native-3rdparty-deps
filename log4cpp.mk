@@ -6,7 +6,7 @@ LIB_VERSION := 1.1rc3
 # Note: Issues warnings about --with-pthreads switch, even though it is
 # listed in the docs... done automatically?
 #
-CONFIGURE = ./log4cpp/configure --prefix=$(INSTALLDIR) --disable-doxygen --with-pthreads
+CONFIGURE = ./configure --prefix=$(INSTALLDIR) --disable-doxygen --with-pthreads
 
 DEPENDENCIES :=
 
