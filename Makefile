@@ -28,6 +28,7 @@ endef
 
 endif
 
+.SECONDARY: $(patsubst %,$(findstring $(MAKECMDGOALS),$(LIBS)).%,upload.tgz log.tgz d)
 .PHONY: all clean depend $(LIBS)
 .DEFAULT_GOAL = all
 
