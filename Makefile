@@ -1,7 +1,7 @@
 
 LIBS := $(basename $(filter-out depend.mk heroku.mk,$(wildcard *.mk)))
 LOGDIR := /tmp/log
-make_cmd = MAKEFILES=$(MAKEFILES) $(MAKE) -f $(main) LOGDIR=$(LOGDIR)
+make_cmd = MAKEFILES=$(MAKEFILES) $(MAKE) -f $(main) $(1) LOGDIR=$(LOGDIR)
 
 ifdef LOCALBUILD
 
@@ -9,21 +9,21 @@ ifeq ($(BUILDENV),)
 $(error BUILDENV not defined. Must be set to the location of a makefile specifying S3 keys and any other required settings)
 endif
 
-MAKEFILES = "$(BUILDENV) $(abspath $(@:.log.tgz=).mk)"
+MAKEFILES = "$(BUILDENV) $(abspath $(*).mk)"
 main := build/heroku.mk
 
 define build
-	$(make_cmd)
+	$(call make_cmd,)
     tar -czf $@ $(LOGDIR)
 endef
 
 else
 
-MAKEFILES = "$$HOME/.build-env $(@:.log.tgz=).mk"
+MAKEFILES = "$$HOME/.build-env $(*).mk"
 main := $$HOME/build/heroku.mk
 
 define build
-	vulcan build -s $< -p $(LOGDIR) -c '$(make_cmd)' -v -o $@
+	vulcan build -s $< -p $(LOGDIR) -c '$(call make_cmd,)' -v -o $@
 endef
 
 endif
@@ -48,14 +48,16 @@ depend: $(addsuffix .d,$(LIBS))
 # NB: this does not work if there were build errors...
 #
 $(foreach lib,$(LIBS),$(eval $(lib): $(lib).log.tgz))
-$(foreach lib,$(LIBS),$(eval $(lib).log.tgz: $(lib).upload.tgz))
 
 # requires a separate make invocation since each library makefile needs to be
 # read for its dependencies, and all use the same variable names
 #
 %.d: %.mk
 	@echo Building $@ 
-	$(MAKE) -f depend.mk $(<:.mk=)
+	$(MAKE) -f depend.mk $(*)
+
+%-clean: %.mk
+	$(call make_cmd,$@)
 
 clean:
 	-rm -f *.d *.upload.tgz *.log.tgz
